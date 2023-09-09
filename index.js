@@ -238,7 +238,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello Digital shop')
+  res.send('Welcome to Digital Watch shop')
 })
 
 app.listen(port, () => {
