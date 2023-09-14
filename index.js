@@ -8,6 +8,16 @@ require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
 
+
+// const corsConfig = {
+//   origin: '',
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE']
+// }
+// app.use(cors(corsConfig))
+// app.options("", cors(corsConfig))
+// https://dev.to/shafia/some-common-vercel-errors-548i
+
 app.use(cors());
 app.use(express.json());
 
@@ -48,7 +58,7 @@ function verifyJWT(req, res, next) {
 async function run() {
 
   try {
-    await client.connect();
+    
     const classicWatchCollection = client.db("Digital-Watch-Shop").collection("classicWatch");
     const modernWatchCollection = client.db("Digital-Watch-Shop").collection("modernWatch");
     const specialWatchCollection = client.db("Digital-Watch-Shop").collection("specialWatch");
