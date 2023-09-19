@@ -64,6 +64,7 @@ async function run() {
     const specialWatchCollection = client.db("Digital-Watch-Shop").collection("specialWatch");
     const orderCollection = client.db("Digital-Watch-Shop").collection("order");
     const userCollection = client.db("Digital-Watch-Shop").collection("user");
+    const paymentCollection = client.db("Digital-Watch-Shop").collection("payment");
     
 
 
@@ -214,10 +215,9 @@ async function run() {
 
 
 
-    app.post("/create-payment-intent",   async (req, res) => {
+    app.post("/create-payment-intent", verifyJWT,  async (req, res) => {
       const { price } = req.body;
       const amount = price * 100 ;
-      console.log(price ,amount );
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
         currency: "usd",
@@ -229,6 +229,19 @@ async function run() {
         clientSecret: paymentIntent.client_secret
 
       })
+
+    })
+
+
+
+    app.post("/payments",  async (req, res) => {
+
+      const payment = req.body;
+      const insertResult = await paymentCollection.insertOne(payment);
+      const query = {_id :{ $in: payment.items.map(id => new ObjectId(id) )}} ;
+      const deleteResult = await orderCollection.deleteMany(query) ;
+      res.send({insertResult , deleteResult}) ;
+
 
     })
 
